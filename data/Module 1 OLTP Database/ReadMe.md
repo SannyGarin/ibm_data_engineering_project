@@ -2,6 +2,8 @@ Hi there,
 
 I'm glad you are here.
 
+These files are mostly screenshots, csv, and bash file.
+
 This project is about creating a simple OLTP server so there isn't much coding
 
 Here's the code of the datadump.sh that enables me to automatically backup my simple OLTP database.
