@@ -8,7 +8,7 @@ This project is about creating a simple OLTP server so there isn't much coding
 
 Here's the code of the datadump.sh that enables me to automatically backup my simple OLTP database.
 
-'''#!/bin/bash
+```#!/bin/bash
 
 # setting up MySQL credentials and database name
 
@@ -26,4 +26,4 @@ USE $MYSQL_DATABASE;
 SELECT COUNT(*) FROM $TABLE_NAME;
 EOF
 
-echo "Backup completed successfully!"'''
+echo "Backup completed successfully!"```
