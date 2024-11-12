@@ -1,0 +1,62 @@
+
+Download the json file
+
+wget https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DB0321EN-SkillsNetwork/nosql/catalog.json
+
+
+
+Task 1 - Import ‘catalog.json’ into mongodb server into a database named ‘catalog’ and a collection named ‘electronics'
+
+mongoimport -u root -p VuO9aZQOEkagDFfja7bnqM7o --authenticationDatabase admin -d catalog -c electronics --host mongo catalog.json
+
+
+
+
+Task 2 - List out all the databases
+
+mongosh --host 172.21.44.80 --port 27017 --username root --password VuO9aZQOEkagDFfja7bnqM7o <<EOF
+show dbs
+EOF
+
+Task 3 - List out all the collections in the database
+
+mongosh --host 172.21.44.80 --port 27017 --username root --password VuO9aZQOEkagDFfja7bnqM7o <<EOF
+use catalog
+show collections
+EOF
+
+Task 4 - Create an index on the field “type”
+
+
+mongosh --host 172.21.44.80 --port 27017 --username root --password VuO9aZQOEkagDFfja7bnqM7o <<EOF
+use catalog
+db.electronics.createIndex({ type: 1 })
+EOF
+
+Task 5 - Write a query to find the count of laptops
+
+mongosh --host 172.21.44.80 --port 27017 --username root --password VuO9aZQOEkagDFfja7bnqM7o <<EOF
+use catalog
+db.electronics.countDocuments({ type: "laptop" })
+EOF
+
+Task 6 - Write a query to find the number of smart phones with screen size of 6 inches.
+
+mongosh --host 172.21.44.80 --port 27017 --username root --password VuO9aZQOEkagDFfja7bnqM7o <<EOF
+use catalog
+db.electronics.countDocuments({ type: "smart phone" , 'screen size': 6  })
+EOF
+
+Task 7. Write a query to find out the average screen size of smart phones.
+
+mongosh mongodb://root:VuO9aZQOEkagDFfja7bnqM7o@172.21.44.80:27017
+
+
+use catalog
+db.electronics.aggregate([{ $match: { type: "smart phone" } }, { $group: { _id: "$type", average: { $avg: "$screen size" } } } ]).pretty()
+
+
+  
+Task 8 - Export the fields _id, “type”, “model”, from the ‘electronics’ collection into a file named electronics.csv
+
+mongoexport -u root -p VuO9aZQOEkagDFfja7bnqM7o --authenticationDatabase admin -d catalog -c electronics -f "_id,type,model" --type=csv -o electronics.csv --host mongo 

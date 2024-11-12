@@ -1,0 +1,59 @@
+wget https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DB0321EN-SkillsNetwork/ETL/accesslog.txt
+
+create a bash file to download the dataset and save it to a specified destination
+
+touch download_dataset.sh
+
+COPY PASTE THE BELOW"
+
+"""#!/bin/bash
+
+# Replace with the actual download URL
+download_url="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DB0321EN-SkillsNetwork/ETL/accesslog.txt"
+
+# Destination directory
+destination_dir="/home/project/airflow/dags/capstone"
+
+# Create the destination directory if it doesn't exist
+mkdir -p "$destination_dir"
+
+# Download the file using wget
+wget -q -O "$destination_dir/accesslog.txt" "$download_url"
+
+# Check if the download was successful
+if [ $? -eq 0 ]; then
+  echo "Download completed successfully!"
+else
+  echo "Download failed."
+fi"""
+
+bash file name "download_dataset.sh"
+
+chmod +x download_dataset.sh
+
+bash download_dataset.sh
+
+
+cut -d ' ' -f 4 accesslog.txt
+
+cut -d ' ' -f 1 | grep -v "83.149.9.216"
+
+cut -d ' ' -f 1 accesslog.txt > extract.csv
+
+grep -v "83.149.9.216" extract.csv > transform.csv
+
+
+export AIRFLOW_HOME=/home/project/airflow
+sudo cp process_web_log.py $AIRFLOW_HOME/dags/capstone
+
+airflow dags unpause process_web_log
+
+airflow dags unpause 
+
+airflow tasks list process_web_log
+
+python3.11 /home/project/airflow/dags/capstone/process_web_log.py
+
+
+python3.11 -m pip install --upgrade apache-airflow
+

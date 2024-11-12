@@ -1,0 +1,21 @@
+ETL syntax
+
+Downloading sql file 
+
+wget https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DB0321EN-SkillsNetwork/ETL/sales.sql
+
+touch import_sales_data.sh
+
+chmod +x import_sales_data.sh
+
+bash import_sales_data.sh
+
+wget https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/BFgMvlR8BKEjijGlWowK1Q/mysqlconnect.py
+
+python3.11 -m pip install mysql-connector-python;
+
+wget https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DB0321EN-SkillsNetwork/ETL/db2connect.py
+
+pip install --force-reinstall ibm_db==3.1.0 ibm_db_sa==0.3.3
+
+
