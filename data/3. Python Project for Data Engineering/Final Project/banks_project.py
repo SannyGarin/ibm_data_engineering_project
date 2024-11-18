@@ -18,25 +18,6 @@ def log_progress(message):
        
 
 
-# def extract(url, table_attribs):
-#     ''' The purpose of this function is to extract the required
-#     information from the website and save it to a dataframe. The
-#     function returns the dataframe for further processing. '''
-#     page = requests.get(url, verify = False).text
-#     data = BeautifulSoup(page,'html.parser')
-#     df = pd.DataFrame(columns=table_attribs)
-#     tables = data.find_all('tbody')
-#     rows = tables[0].find_all('tr')
-#     for row in rows:
-#         col = row.find_all('td')
-#         if len(col)!=0:
-
-#             data_dict = {"Name": col[1].contents[2],
-#                             "MC_USD_Billion": col[2].contents[0]}
-#             df1 = pd.DataFrame(data_dict, index=[0])
-#             df = pd.concat([df,df1], ignore_index=True)
-#     return df
-
 def extract(url, table_attribs):
     ''' The purpose of this function is to extract the required
     information from the website and save it to a dataframe. The
@@ -60,18 +41,6 @@ def extract(url, table_attribs):
 
     return df
 
-# def transform(df, csv_path):
-#     ''' This function accesses the CSV file for exchange rate
-#     information, and adds three columns to the data frame, each
-#     containing the transformed version of Market Cap column to
-#     respective currencies'''
-
-#     exchange_rate_read = pd.read_csv(csv_path)
-#     df['MC_USD_Billion'] = df['MC_USD_Billion'].astype(str).apply(lambda x: x.replace('\n',''))
-#     df['MC_GBP_Billion'] = df['MC_USD_Billion'].astype(float).apply(lambda x: np.round(x * (exchange_rate_read.iloc[1,1]),2))
-#     df['MC_EUR_Billion'] = df['MC_USD_Billion'].astype(float).apply(lambda x: np.round(x * (exchange_rate_read.iloc[0,1]),2))
-#     df['MC_INR_Billion'] = df['MC_USD_Billion'].astype(float).apply(lambda x: np.round(x * (exchange_rate_read.iloc[2,1]),2))
-#     return df
 
 def transform(df, csv_path):
     ''' This function accesses the CSV file for exchange rate
@@ -112,38 +81,45 @@ url = "https://web.archive.org/web/20230908091635 /https://en.wikipedia.org/wiki
 table_attribs = ["Name", "MC_USD_Billion"]
 db_name = 'Banks.db'
 table_name = 'Largest_banks'
-csv_path = r'C:\Users\SESA647993\Desktop\Continous Learning\Coursera\Python Project for Data Engineering\Final Project\exchange_rate.csv'
-output_path = r'C:\Users\SESA647993\Desktop\Continous Learning\Coursera\Python Project for Data Engineering\Final Project\Largest_banks_data.csv'
+csv_path = r'C:\Users\SESA647993\Desktop\Continous Learning\Coursera\3. Python Project for Data Engineering\Final Project\exchange_rate.csv'
+output_path = r'C:\Users\SESA647993\Desktop\Continous Learning\Coursera\3. Python Project for Data Engineering\Final Project\Largest_banks_data.csv'
+
+
 
 log_progress('Preliminaries complete. Initiating ETL process')
+
 df = extract(url, table_attribs)
 log_progress('Data extraction complete. Initiating Transformation process')
 
-log_progress('Data transformation complete. Initiating Loading process')
+
 df = transform(df, csv_path)
+log_progress('Data transformation complete. Initiating Loading process')
 
-print(df)
 
-log_progress('Data saved to CSV file')
 load_to_csv(df, output_path)
+log_progress('Data saved to CSV file')
 
-log_progress('SQL Connection initiated.')
+
 sql_connection = sqlite3.connect('Banks.db')
-load_to_db(df, sql_connection, table_name)
+log_progress('SQL Connection initiated.')
 
+
+load_to_db(df, sql_connection, table_name)
 log_progress('Data loaded to Database as table. Running the query')
+
+
 query_statement1 = f"SELECT * from {table_name}"
 query_statement2 = f"SELECT AVG(MC_GBP_Billion) from {table_name}"
 query_statement3 = f"SELECT Name from {table_name} LIMIT 5"
 
 run_query(query_statement1, sql_connection)
-log_progress('Process Complete.')
+log_progress('Query 1 Process Complete.')
 
 run_query( query_statement2, sql_connection)
-log_progress('Process Complete.')
+log_progress('Query 2 Process Complete.')
 
 run_query(query_statement3, sql_connection)
-log_progress('Process Complete.')
+log_progress('Query 3 Process Complete.')
 
 sql_connection.close()
 log_progress('Server Connection closed')
