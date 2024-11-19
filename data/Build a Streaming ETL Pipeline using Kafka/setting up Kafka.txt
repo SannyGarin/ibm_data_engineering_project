@@ -1,0 +1,36 @@
+wget https://downloads.apache.org/kafka/3.8.0/kafka_2.13-3.8.0.tgz
+
+tar -xzf kafka_2.13-3.8.0.tgz
+
+cd kafka_2.13-3.8.0
+
+KAFKA_CLUSTER_ID="$(bin/kafka-storage.sh random-uuid)"
+
+bin/kafka-storage.sh format -t $KAFKA_CLUSTER_ID -c config/kraft/server.properties
+
+
+bin/kafka-server-start.sh config/kraft/server.properties
+
+OPEN NEW TERMINAL
+
+cd kafka_2.13-3.8.0
+
+bin/kafka-topics.sh --create --topic toll --bootstrap-server localhost:9092
+
+OPEN NEW TERMINAL
+
+wget https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DB0250EN-SkillsNetwork/labs/Final%20Assignment/toll_traffic_generator.py
+
+python3 toll_traffic_generator.py
+
+wget https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/vVxmU5uatDowvAIKRZrFjg/streaming-data-reader.py
+
+python3 streaming-data-reader.py
+
+mysql --host=172.21.189.194 --port=3306 --user=root --password=lTcCS6cEqLwtHivxeCbrfntr
+use tolldata;
+SELECT * FROM livetolldata LIMIT 10;
+
+
+
+
