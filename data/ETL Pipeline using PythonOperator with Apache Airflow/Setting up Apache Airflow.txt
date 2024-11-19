@@ -1,0 +1,7 @@
+# After starting Apache Spark, create a directory structure for staging area
+
+sudo mkdir -p /home/project/airflow/dags/python_etl/staging
+
+# Execute the following commands to avoid any permission issues in writing to the directories.
+
+sudo chmod -R 777 /home/project/airflow/dags/python_etl
