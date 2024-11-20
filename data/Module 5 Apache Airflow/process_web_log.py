@@ -1,10 +1,10 @@
 # import the libraries
 
-from datetime import timedelta
+from datetime import datetime, timedelta
 # The DAG object; we'll need this to instantiate a DAG
 from airflow.models import DAG
 # Operators; you need this to write tasks!
-from airflow.operators.bash_operator import BashOperator
+from airflow.operators.bash import BashOperator
 # This makes scheduling easy
 from airflow.utils.dates import days_ago
 
@@ -13,23 +13,18 @@ from airflow.utils.dates import days_ago
 # You can override them on a per-task basis during operator initialization
 default_args = {
     'owner': 'Sanny_Garin_Jr',
-    'start_date': days_ago(0),
+    'start_date': datetime.now(),
     'email': ['sample@email.com'],
 }
 
-
-
 # defining the DAG
 
-# define the DAG
 dag = DAG(
-    'process_web_log1',
+    'process_web_log',
     default_args=default_args,
-    description='process_web_log1',
+    description='process_web_log',
     schedule_interval=timedelta(days=1),
 )
-
-# define the tasks
 
 # define the task 'extract'
 
@@ -39,7 +34,6 @@ extract_data = BashOperator(
     dag=dag,
 )
 
-
 # define the task 'transform'
 
 transform_data = BashOperator(
@@ -47,7 +41,6 @@ transform_data = BashOperator(
     bash_command='grep -v "198.46.149.143" /home/project/airflow/dags/capstone/extracted_data.txt > /home/project/airflow/dags/capstone/transformed_data.txt',
     dag=dag,
 )
-
 
 # define the task 'load'
 
